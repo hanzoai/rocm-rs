@@ -3,9 +3,12 @@ use rocm_kernel_macros::{
     amdgpu_device, amdgpu_global, amdgpu_kernel_finalize, amdgpu_kernel_init,
 };
 
-amdgpu_kernel_init!(path: __build_in_kernels_sorting);
-
-#[amdgpu_device(__build_in_kernels_sorting)]
+amdgpu_kernel_init!(
+    path = __build_in_kernels_sorting,
+    dir = __build_in_kernels_sorting,
+    binary_name = sorting
+);
+#[amdgpu_device(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
 use core::{cmp::PartialOrd, ptr::swap};
 
 use crate::{
@@ -13,7 +16,7 @@ use crate::{
     kernel_args,
 };
 
-#[amdgpu_device(__build_in_kernels_sorting)]
+#[amdgpu_device(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
 fn sort_odd_inner<T: Clone + Copy + PartialOrd>(arr: *mut T, ascending: bool) {
     let id_x = workgroup_id_x() as usize;
 
@@ -30,7 +33,7 @@ fn sort_odd_inner<T: Clone + Copy + PartialOrd>(arr: *mut T, ascending: bool) {
     }
 }
 
-#[amdgpu_device(__build_in_kernels_sorting)]
+#[amdgpu_device(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
 fn sort_even_inner<T: Clone + Copy + PartialOrd>(arr: *mut T, ascending: bool) {
     let id_x = workgroup_id_x() as usize;
 
@@ -47,7 +50,7 @@ fn sort_even_inner<T: Clone + Copy + PartialOrd>(arr: *mut T, ascending: bool) {
     }
 }
 
-#[amdgpu_device(__build_in_kernels_sorting)]
+#[amdgpu_device(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
 fn check_sorted_inner<T: Clone + Copy + PartialOrd>(arr: *mut T, target: *mut bool, size: usize) {
     let id_x = workgroup_id_x() as usize;
 
@@ -68,17 +71,17 @@ fn check_sorted_inner<T: Clone + Copy + PartialOrd>(arr: *mut T, target: *mut bo
 macro_rules! sort_fns {
     ($t:ty) => {
         paste::paste! {
-            #[amdgpu_global(__build_in_kernels_sorting)]
+            #[amdgpu_global(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
             fn [<sort_odd_$t>](arr: *mut $t, ascending: bool) {
                 sort_odd_inner::<$t>(arr, ascending)
             }
 
-            #[amdgpu_global(__build_in_kernels_sorting)]
+            #[amdgpu_global(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
             fn [<sort_even_$t>](arr: *mut $t, ascending: bool) {
                 sort_even_inner::<$t>(arr, ascending)
             }
 
-            #[amdgpu_global(__build_in_kernels_sorting)]
+            #[amdgpu_global(path = __build_in_kernels_sorting, dir = __build_in_kernels_sorting)]
             fn [<check_sorted_$t>](arr: *mut $t, target: *mut bool, size: usize) {
                 check_sorted_inner::<$t>(arr, target, size)
             }
@@ -99,8 +102,11 @@ macro_rules! impl_gpu_sort_allowed {
 
 impl_gpu_sort_allowed!(i8, i16, i32, i64, u8, u16, u32, u64, f32, f64);
 
-pub(crate) const SORTING_KERNEL: &[u8] =
-    include_bytes!(amdgpu_kernel_finalize!(__build_in_kernels_sorting));
+pub(crate) const SORTING_KERNEL: &[u8] = include_bytes!(amdgpu_kernel_finalize!(
+    path = __build_in_kernels_sorting,
+    dir = __build_in_kernels_sorting,
+    binary_name = sorting
+));
 
 pub(crate) fn sort<T>(mem: &mut DeviceMemory<T>, stream: &Stream, ascending: bool) -> Result<()> {
     let module = Module::load_data(SORTING_KERNEL)?;
@@ -161,10 +167,7 @@ pub(crate) fn check_sorted<T>(mem: &DeviceMemory<T>, stream: Option<&Stream>) ->
 mod test {
     use crate::{
         error::Result,
-        hip::{
-            Device, DeviceMemory,
-            memory_ext::sorting::check_sorted,
-        },
+        hip::{Device, DeviceMemory, memory_ext::sorting::check_sorted},
     };
 
     #[test]

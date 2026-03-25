@@ -138,12 +138,12 @@ where
     }
 }
 pub const HIP_VERSION_MAJOR: u32 = 7;
-pub const HIP_VERSION_MINOR: u32 = 1;
-pub const HIP_VERSION_PATCH: u32 = 52802;
+pub const HIP_VERSION_MINOR: u32 = 2;
+pub const HIP_VERSION_PATCH: u32 = 26064;
 pub const HIP_VERSION_GITHASH: &[u8; 1] = b"\0";
 pub const HIP_VERSION_BUILD_ID: u32 = 0;
 pub const HIP_VERSION_BUILD_NAME: &[u8; 1] = b"\0";
-pub const HIP_VERSION: u32 = 70152802;
+pub const HIP_VERSION: u32 = 70226064;
 pub const HIP_TRSA_OVERRIDE_FORMAT: u32 = 1;
 pub const HIP_TRSF_READ_AS_INTEGER: u32 = 1;
 pub const HIP_TRSF_NORMALIZED_COORDINATES: u32 = 2;
@@ -1290,6 +1290,7 @@ pub const hipDeviceAttribute_t_hipDeviceAttributeVirtualMemoryManagementSupporte
 pub const hipDeviceAttribute_t_hipDeviceAttributeHostRegisterSupported: hipDeviceAttribute_t = 90;
 pub const hipDeviceAttribute_t_hipDeviceAttributeMemoryPoolSupportedHandleTypes:
     hipDeviceAttribute_t = 91;
+pub const hipDeviceAttribute_t_hipDeviceAttributeHostNumaId: hipDeviceAttribute_t = 92;
 pub const hipDeviceAttribute_t_hipDeviceAttributeCudaCompatibleEnd: hipDeviceAttribute_t = 9999;
 pub const hipDeviceAttribute_t_hipDeviceAttributeAmdSpecificBegin: hipDeviceAttribute_t = 10000;
 pub const hipDeviceAttribute_t_hipDeviceAttributeClockInstructionRate: hipDeviceAttribute_t = 10000;
@@ -3153,6 +3154,9 @@ unsafe extern "C" {
     ) -> hipError_t;
 }
 unsafe extern "C" {
+    pub fn hipStreamCopyAttributes(dst: hipStream_t, src: hipStream_t) -> hipError_t;
+}
+unsafe extern "C" {
     pub fn hipStreamWaitValue32(
         stream: hipStream_t,
         ptr: *mut ::std::os::raw::c_void,
@@ -4307,6 +4311,22 @@ unsafe extern "C" {
     ) -> hipError_t;
 }
 unsafe extern "C" {
+    pub fn hipLibraryEnumerateKernels(
+        kernels: *mut hipKernel_t,
+        numKernels: ::std::os::raw::c_uint,
+        library: hipLibrary_t,
+    ) -> hipError_t;
+}
+unsafe extern "C" {
+    pub fn hipKernelGetLibrary(library: *mut hipLibrary_t, kernel: hipKernel_t) -> hipError_t;
+}
+unsafe extern "C" {
+    pub fn hipKernelGetName(
+        name: *mut *const ::std::os::raw::c_char,
+        kernel: hipKernel_t,
+    ) -> hipError_t;
+}
+unsafe extern "C" {
     pub fn hipFuncGetAttributes(
         attr: *mut hipFuncAttributes,
         func: *const ::std::os::raw::c_void,
@@ -4539,6 +4559,14 @@ unsafe extern "C" {
         f: *const ::std::os::raw::c_void,
         dynSharedMemPerBlk: usize,
         blockSizeLimit: ::std::os::raw::c_int,
+    ) -> hipError_t;
+}
+unsafe extern "C" {
+    pub fn hipOccupancyAvailableDynamicSMemPerBlock(
+        dynamicSmemSize: *mut usize,
+        f: *const ::std::os::raw::c_void,
+        numBlocks: ::std::os::raw::c_int,
+        blockSize: ::std::os::raw::c_int,
     ) -> hipError_t;
 }
 unsafe extern "C" {

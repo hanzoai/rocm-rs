@@ -1,4 +1,5 @@
 use rocm_rs::error::Result;
+use rocm_rs::hip::kernel::AsKernelArg;
 use rocm_rs::hip::{calculate_grid_1d, Device, DeviceMemory, Dim3, Module, Stream, Timer};
 use std::env;
 use std::path::PathBuf;
@@ -39,7 +40,7 @@ fn main() -> Result<()> {
     let function = module.get_function("vector_add")?;
 
     // Create a stream for async operations
-    let stream = Stream::new()?;
+    let stream = device.get_stream()?;
 
     // Get the test size from command line or use default
     let args: Vec<String> = env::args().collect();
@@ -54,7 +55,7 @@ fn main() -> Result<()> {
     // Prepare host data
     println!("Preparing host data...");
     let a: Vec<f32> = (0..n).map(|i| i as f32).collect();
-    let b: Vec<f32> = (0..n).map(|i| (2.0 * i as f32)).collect();
+    let b: Vec<f32> = (0..n).map(|i| 2.0 * i as f32).collect();
     let c = vec![0.0f32; n];
 
     // Allocate device memory

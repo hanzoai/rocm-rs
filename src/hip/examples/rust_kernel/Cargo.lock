@@ -145,12 +145,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "once_cell"
-version = "1.21.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
-
-[[package]]
 name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -215,34 +209,16 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
 name = "rocm-rs"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "bindgen",
- "log",
- "once_cell",
  "paste",
- "rocm_kernel_macros 0.4.2",
-]
-
-[[package]]
-name = "rocm_kernel_macros"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2c059e17b93ebabc4502167a09e4c56626d88e5fba6b070785ebd7ce3c387e1"
-dependencies = [
- "fslock",
- "proc-macro2",
- "quote",
- "serde",
- "serde_json",
- "syn",
+ "rocm_kernel_macros",
 ]
 
 [[package]]
 name = "rocm_kernel_macros"
 version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c180cfaeffccc518db1100beffb3eae2827ae52ad89c56a5417aa0df37f13ca3"
 dependencies = [
  "fslock",
  "proc-macro2",
@@ -258,7 +234,6 @@ name = "rust_kernel"
 version = "0.1.0"
 dependencies = [
  "rocm-rs",
- "rocm_kernel_macros 0.3.0",
 ]
 
 [[package]]

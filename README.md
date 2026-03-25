@@ -38,7 +38,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rocm-rs = "4.2"
+rocm-rs = "5.1"
 ```
 
 ## Usage
@@ -50,8 +50,11 @@ First, ensure that the ROCm libraries are in your library path or set the `ROCM_
 ```rust
 use std::path::PathBuf;
 
-use rocm_kernel_macros::{amdgpu_kernel_attr, amdgpu_kernel_finalize, amdgpu_kernel_init};
-use rocm_rs::hip::*;
+use rocm_rs::{
+    hip::{kernel::AsKernelArg, *},
+    kernel_args,
+    rocm_kernel_macros::{amdgpu_global, amdgpu_kernel_finalize, amdgpu_kernel_init},
+};
 
 const LEN: usize = 1024;
 
@@ -59,7 +62,7 @@ const LEN: usize = 1024;
 amdgpu_kernel_init!();
 
 // marking code that will be coppied to gpu kernel
-#[amdgpu_kernel_attr]
+#[amdgpu_global]
 fn kernel(input: *const u32, output: *mut u32) {
     // retriving data from buffere by workitem
     let num = read_by_workitem_id_x(input);
@@ -100,7 +103,7 @@ fn main() -> Result<()> {
     input.copy_from_host(&in_host)?;
 
     // providing arguments for kernel
-    let kernel_args = [input.as_kernel_arg(), output.as_kernel_arg()];
+    let kernel_args = kernel_args!(input, output);
 
     // setting up launch args
     let grid_dim = Dim3 { x: 2, y: 1, z: 1 };
@@ -119,6 +122,64 @@ fn main() -> Result<()> {
 
     Ok(())
 }
+```
+
+For async operations with streams:
+
+```rust
+use std::path::PathBuf;
+
+use rocm_rs::{hip::{kernel::AsKernelArg, *}, rocm_kernel_macros::*};
+
+const LEN: usize = 1024;
+
+amdgpu_kernel_init!();
+
+#[amdgpu_global]
+fn kernel(input: *const u32, output: *mut u32) {
+    let num = read_by_workitem_id_x(input);
+    write_by_workitem_id_x(output, num * 3);
+}
+
+const AMDGPU_KERNEL_BINARY_PATH: &str = amdgpu_kernel_finalize!();
+
+fn main() -> Result<()> {
+    let device = Device::current()?;
+    
+    // Create a stream for async operations
+    let stream = device.get_stream()?;
+    stream.add_callback(|| println!("callback"))?;
+
+    let kernel_path = PathBuf::from(AMDGPU_KERNEL_BINARY_PATH);
+    let module = Module::load(kernel_path)?;
+    let function = module.get_function("kernel")?;
+
+    let in_host: Vec<u32> = (0..LEN).map(|i| i as u32).collect();
+    let out_host: Vec<u32> = vec![0; LEN];
+
+    let input = DeviceMemory::<u32>::new(LEN)?;
+    let output = DeviceMemory::<u32>::new(LEN)?;
+
+    // Copy data from host to device asynchronously
+    input.copy_from_host_async(in_host, &stream)?;
+
+    let kernel_args = [input.as_kernel_arg(), output.as_kernel_arg()];
+
+    let grid_dim = Dim3 { x: 2, y: 1, z: 1 };
+    let block_dim = Dim3 { x: (LEN / 2) as u32, y: 1, z: 1 };
+
+    function.launch(grid_dim, block_dim, 0, Some(&stream), &mut kernel_args.clone())?;
+
+    // Retrieve computed data asynchronously
+    let pending = output.copy_to_host_async(out_host, &stream)?;
+
+    // Synchronize memory (awaiting for copy to finish)
+    let out_host = stream.synchronize_memory(pending)?;
+    println!("Output: {:?}", &out_host[..256]);
+
+    Ok(())
+}
+```
 
 
 ```
@@ -179,13 +240,28 @@ cargo build
 - rocm_smi - enables bindings and wrappers for rocm_smi_lib
 
 ## Examples
-- hip
-  - vector_add - example containing kernel written in cpp launched with rocm-rs
-  - rust_kernel - example containing kernel written in in rust using macros 
-  - rust_kernel_async - example containing kernel written in in rust, using stream to manage memory asynchronously 
-  - saxpy - X = aX+Y
-- rand
-  - normal - generating random numbers with normal distribution 
+
+The project includes a workspace with examples for each sub-library. Run examples with:
+```bash
+cargo run --package <example_name> --example <example_name>
+```
+
+### HIP
+- `vector_add_example` - Vector addition with kernel written in HIP
+- `rust_kernel` - Kernel written in Rust using macros
+- `rust_kernel_async` - Async kernel execution with streams
+- `saxpy` - SAXPY operation (Single-precision A*X + Y)
+- `sort` - GPU sorting example
+
+### MIOpen
+- `miopen_basic` - Basic MIOpen usage example
+- `multi_tensor` - Multi-tensor operations
+
+### rocBLAS
+- `rocblas_basic` - Basic rocBLAS usage example
+
+### rocRAND
+- `normal` - Random number generation with normal distribution
 
 ## Contributing
 
