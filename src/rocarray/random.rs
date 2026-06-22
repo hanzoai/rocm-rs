@@ -414,7 +414,10 @@ pub struct RandomUtils;
 
 impl RandomUtils {
     /// Create a seeded generator for reproducible results
-    pub fn seeded_generator(seed: u64, rng_type: u32) -> Result<PseudoRng> {
+    pub fn seeded_generator(
+        seed: u64,
+        rng_type: crate::rocrand::bindings::rocrand_rng_type,
+    ) -> Result<PseudoRng> {
         let mut generator = PseudoRng::new(rng_type)?;
         generator.set_seed(seed)?;
         generator.initialize()?;

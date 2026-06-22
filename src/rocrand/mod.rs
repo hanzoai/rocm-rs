@@ -19,53 +19,66 @@ pub use generator::{Generator, PseudoRng, QuasiRng};
 
 /// Convenient re-exports of random number generator types
 pub mod rng_type {
-    use super::bindings;
+    use super::bindings::{self, rocrand_rng_type};
 
-    pub const PSEUDO_DEFAULT: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_DEFAULT;
-    pub const XORWOW: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_XORWOW;
-    pub const MRG32K3A: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MRG32K3A;
-    pub const MTGP32: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MTGP32;
-    pub const PHILOX4_32_10: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_PHILOX4_32_10;
-    pub const MRG31K3P: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MRG31K3P;
-    pub const LFSR113: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_LFSR113;
-    pub const MT19937: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MT19937;
-    pub const THREEFRY2_32_20: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY2_32_20;
-    pub const THREEFRY2_64_20: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY2_64_20;
-    pub const THREEFRY4_32_20: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY4_32_20;
-    pub const THREEFRY4_64_20: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY4_64_20;
+    pub const PSEUDO_DEFAULT: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_DEFAULT;
+    pub const XORWOW: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_XORWOW;
+    pub const MRG32K3A: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MRG32K3A;
+    pub const MTGP32: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MTGP32;
+    pub const PHILOX4_32_10: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_PHILOX4_32_10;
+    pub const MRG31K3P: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MRG31K3P;
+    pub const LFSR113: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_LFSR113;
+    pub const MT19937: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_MT19937;
+    pub const THREEFRY2_32_20: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY2_32_20;
+    pub const THREEFRY2_64_20: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY2_64_20;
+    pub const THREEFRY4_32_20: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY4_32_20;
+    pub const THREEFRY4_64_20: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_PSEUDO_THREEFRY4_64_20;
 
-    pub const QUASI_DEFAULT: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_DEFAULT;
-    pub const SOBOL32: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_SOBOL32;
-    pub const SCRAMBLED_SOBOL32: u32 =
+    pub const QUASI_DEFAULT: rocrand_rng_type =
+        bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_DEFAULT;
+    pub const SOBOL32: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_SOBOL32;
+    pub const SCRAMBLED_SOBOL32: rocrand_rng_type =
         bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_SCRAMBLED_SOBOL32;
-    pub const SOBOL64: u32 = bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_SOBOL64;
-    pub const SCRAMBLED_SOBOL64: u32 =
+    pub const SOBOL64: rocrand_rng_type = bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_SOBOL64;
+    pub const SCRAMBLED_SOBOL64: rocrand_rng_type =
         bindings::rocrand_rng_type_ROCRAND_RNG_QUASI_SCRAMBLED_SOBOL64;
 }
 
 /// Convenient re-exports of ordering constants
 pub mod ordering {
-    use super::bindings;
+    use super::bindings::{self, rocrand_ordering};
 
-    pub const PSEUDO_BEST: u32 = bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_BEST;
-    pub const PSEUDO_DEFAULT: u32 = bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_DEFAULT;
-    pub const PSEUDO_SEEDED: u32 = bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_SEEDED;
-    pub const PSEUDO_LEGACY: u32 = bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_LEGACY;
-    pub const PSEUDO_DYNAMIC: u32 = bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_DYNAMIC;
-    pub const QUASI_DEFAULT: u32 = bindings::rocrand_ordering_ROCRAND_ORDERING_QUASI_DEFAULT;
+    pub const PSEUDO_BEST: rocrand_ordering =
+        bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_BEST;
+    pub const PSEUDO_DEFAULT: rocrand_ordering =
+        bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_DEFAULT;
+    pub const PSEUDO_SEEDED: rocrand_ordering =
+        bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_SEEDED;
+    pub const PSEUDO_LEGACY: rocrand_ordering =
+        bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_LEGACY;
+    pub const PSEUDO_DYNAMIC: rocrand_ordering =
+        bindings::rocrand_ordering_ROCRAND_ORDERING_PSEUDO_DYNAMIC;
+    pub const QUASI_DEFAULT: rocrand_ordering =
+        bindings::rocrand_ordering_ROCRAND_ORDERING_QUASI_DEFAULT;
 }
 
 /// Re-export direction vector constants
 pub mod direction_vector_set {
-    use super::bindings;
+    use super::bindings::{self, rocrand_direction_vector_set};
 
-    pub const VECTORS_32_JOEKUO6: u32 =
+    pub const VECTORS_32_JOEKUO6: rocrand_direction_vector_set =
         bindings::rocrand_direction_vector_set_ROCRAND_DIRECTION_VECTORS_32_JOEKUO6;
-    pub const SCRAMBLED_VECTORS_32_JOEKUO6: u32 =
+    pub const SCRAMBLED_VECTORS_32_JOEKUO6: rocrand_direction_vector_set =
         bindings::rocrand_direction_vector_set_ROCRAND_SCRAMBLED_DIRECTION_VECTORS_32_JOEKUO6;
-    pub const VECTORS_64_JOEKUO6: u32 =
+    pub const VECTORS_64_JOEKUO6: rocrand_direction_vector_set =
         bindings::rocrand_direction_vector_set_ROCRAND_DIRECTION_VECTORS_64_JOEKUO6;
-    pub const SCRAMBLED_VECTORS_64_JOEKUO6: u32 =
+    pub const SCRAMBLED_VECTORS_64_JOEKUO6: rocrand_direction_vector_set =
         bindings::rocrand_direction_vector_set_ROCRAND_SCRAMBLED_DIRECTION_VECTORS_64_JOEKUO6;
 }
 

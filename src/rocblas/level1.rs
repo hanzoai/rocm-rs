@@ -77,7 +77,9 @@ pub unsafe fn scal_strided_batched<T>(
 where
     T: ScalStridedBatchedType,
 {
-    T::rocblas_scal_strided_batched(handle, n, alpha, x, incx, stride_x, batch_count)
+    unsafe {
+        T::rocblas_scal_strided_batched(handle, n, alpha, x, incx, stride_x, batch_count)
+    }
 }
 
 //==============================================================================
@@ -133,7 +135,9 @@ pub unsafe fn copy_batched<T>(
 where
     T: CopyBatchedType,
 {
-    T::rocblas_copy_batched(handle, n, x, incx, y, incy, batch_count)
+    unsafe {
+        T::rocblas_copy_batched(handle, n, x, incx, y, incy, batch_count)
+    }
 }
 
 /// Copy vectors in a strided batch
