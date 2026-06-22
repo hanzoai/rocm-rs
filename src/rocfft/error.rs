@@ -75,8 +75,8 @@ impl From<NulError> for Error {
     }
 }
 
-impl From<u32> for Error {
-    fn from(status: u32) -> Self {
+impl From<bindings::rocfft_status_e> for Error {
+    fn from(status: bindings::rocfft_status_e) -> Self {
         match status {
             bindings::rocfft_status_e_rocfft_status_success => {
                 panic!("Tried to convert successful status to error")
@@ -89,7 +89,7 @@ impl From<u32> for Error {
             bindings::rocfft_status_e_rocfft_status_invalid_distance => Error::InvalidDistance,
             bindings::rocfft_status_e_rocfft_status_invalid_offset => Error::InvalidOffset,
             bindings::rocfft_status_e_rocfft_status_invalid_work_buffer => Error::InvalidWorkBuffer,
-            code => Error::Unknown(code),
+            code => Error::Unknown(code as u32),
         }
     }
 }
@@ -115,7 +115,7 @@ impl From<&'static str> for Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Check a rocFFT status code and convert to a Rust Result
-pub(crate) fn check_error(status: u32) -> Result<()> {
+pub(crate) fn check_error(status: bindings::rocfft_status_e) -> Result<()> {
     match status {
         bindings::rocfft_status_e_rocfft_status_success => Ok(()),
         _ => Err(Error::from(status)),
@@ -155,9 +155,9 @@ pub(crate) fn check_dimensions(dimensions: usize) -> Result<()> {
 /// Helper function to detect incompatible array types for a transform
 #[inline]
 pub(crate) fn check_compatible_types(
-    transform_type: u32,
-    in_array_type: u32,
-    out_array_type: u32,
+    transform_type: bindings::rocfft_transform_type,
+    in_array_type: bindings::rocfft_array_type,
+    out_array_type: bindings::rocfft_array_type,
 ) -> Result<()> {
     match transform_type {
         bindings::rocfft_transform_type_e_rocfft_transform_type_complex_forward

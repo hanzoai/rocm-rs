@@ -24,7 +24,7 @@ pub enum TransformType {
     RealInverse,
 }
 
-impl From<TransformType> for u32 {
+impl From<TransformType> for bindings::rocfft_transform_type {
     fn from(transform_type: TransformType) -> Self {
         match transform_type {
             TransformType::ComplexForward => {
@@ -54,7 +54,7 @@ pub enum Precision {
     Half,
 }
 
-impl From<Precision> for u32 {
+impl From<Precision> for bindings::rocfft_precision {
     fn from(precision: Precision) -> Self {
         match precision {
             Precision::Single => bindings::rocfft_precision_e_rocfft_precision_single,
@@ -73,7 +73,7 @@ pub enum PlacementType {
     NotInPlace,
 }
 
-impl From<PlacementType> for u32 {
+impl From<PlacementType> for bindings::rocfft_result_placement {
     fn from(placement: PlacementType) -> Self {
         match placement {
             PlacementType::InPlace => bindings::rocfft_result_placement_e_rocfft_placement_inplace,
@@ -101,7 +101,7 @@ pub enum ArrayType {
     Unset,
 }
 
-impl From<ArrayType> for u32 {
+impl From<ArrayType> for bindings::rocfft_array_type {
     fn from(array_type: ArrayType) -> Self {
         match array_type {
             ArrayType::ComplexInterleaved => {
