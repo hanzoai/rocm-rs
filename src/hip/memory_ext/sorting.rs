@@ -102,11 +102,21 @@ macro_rules! impl_gpu_sort_allowed {
 
 impl_gpu_sort_allowed!(i8, i16, i32, i64, u8, u16, u32, u64, f32, f64);
 
+// The embedded amdgcn sort kernel is built at compile time by the external
+// `amdgpu_kernel_finalize!` proc-macro, whose nested `cargo build` inherits the
+// parent rustc env and falls off the nightly+build-std toolchain on non-Linux
+// hosts (Windows/MSVC: "can't find crate for `core`"). GPU sort is never used by
+// LLM inference, so gate the kernel behind the (default-on) `gpu-sort` feature;
+// with it off, `sort()` is a runtime no-op (empty kernel) but the crate builds
+// everywhere. No call sites change.
+#[cfg(feature = "gpu-sort")]
 pub(crate) const SORTING_KERNEL: &[u8] = include_bytes!(amdgpu_kernel_finalize!(
     path = __build_in_kernels_sorting,
     dir = __build_in_kernels_sorting,
     binary_name = sorting
 ));
+#[cfg(not(feature = "gpu-sort"))]
+pub(crate) const SORTING_KERNEL: &[u8] = &[];
 
 pub(crate) fn sort<T>(mem: &mut DeviceMemory<T>, stream: &Stream, ascending: bool) -> Result<()> {
     let module = Module::load_data(SORTING_KERNEL)?;

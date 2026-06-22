@@ -23,12 +23,17 @@ paste = "1.0.15"
 bindgen = "0.71.1"
 
 [features]
-default = ["macros", "miopen"]
+default = ["macros", "miopen", "gpu-sort"]
 rocm_smi = ["dep:rocm_smi_lib"]
 miopen = []
 rocprofiler = []
 rocsolver = []
 macros=["dep:rocm_kernel_macros"]
+# Embeds the amdgcn GPU bitonic-sort kernel (built via the rocm_kernel_macros
+# proc-macro). Default-on; turn off for hosts where the kernel's nested
+# nightly+build-std cargo build is unavailable (e.g. Windows/MSVC) — GPU sort
+# then becomes a runtime no-op, which inference workloads never hit.
+gpu-sort = ["macros"]
 
 [workspace]
 members = [
