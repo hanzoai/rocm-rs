@@ -57,9 +57,11 @@ pub unsafe fn gemm<T>(
 where
     T: GemmType,
 {
-    T::rocblas_gemm(
-        handle, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc,
-    )
+    unsafe {
+        T::rocblas_gemm(
+            handle, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc,
+        )
+    }
 }
 
 /// Batched matrix-matrix multiplication
@@ -106,23 +108,25 @@ pub unsafe fn gemm_batched<T>(
 where
     T: GemmBatchedType,
 {
-    T::rocblas_gemm_batched(
-        handle,
-        transa,
-        transb,
-        m,
-        n,
-        k,
-        alpha,
-        A,
-        lda,
-        B,
-        ldb,
-        beta,
-        C,
-        ldc,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_gemm_batched(
+            handle,
+            transa,
+            transb,
+            m,
+            n,
+            k,
+            alpha,
+            A,
+            lda,
+            B,
+            ldb,
+            beta,
+            C,
+            ldc,
+            batch_count,
+        )
+    }
 }
 
 /// Strided batched matrix-matrix multiplication
@@ -175,26 +179,28 @@ pub unsafe fn gemm_strided_batched<T>(
 where
     T: GemmStridedBatchedType,
 {
-    T::rocblas_gemm_strided_batched(
-        handle,
-        transa,
-        transb,
-        m,
-        n,
-        k,
-        alpha,
-        A,
-        lda,
-        stride_A,
-        B,
-        ldb,
-        stride_B,
-        beta,
-        C,
-        ldc,
-        stride_C,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_gemm_strided_batched(
+            handle,
+            transa,
+            transb,
+            m,
+            n,
+            k,
+            alpha,
+            A,
+            lda,
+            stride_A,
+            B,
+            ldb,
+            stride_B,
+            beta,
+            C,
+            ldc,
+            stride_C,
+            batch_count,
+        )
+    }
 }
 
 /// General matrix-matrix multiplication with extended precision
@@ -2016,22 +2022,24 @@ pub unsafe fn hemm_batched<T>(
 where
     T: HemmBatchedType,
 {
-    T::rocblas_hemm_batched(
-        handle,
-        side,
-        uplo,
-        m,
-        n,
-        alpha,
-        A,
-        lda,
-        B,
-        ldb,
-        beta,
-        C,
-        ldc,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_hemm_batched(
+            handle,
+            side,
+            uplo,
+            m,
+            n,
+            alpha,
+            A,
+            lda,
+            B,
+            ldb,
+            beta,
+            C,
+            ldc,
+            batch_count,
+        )
+    }
 }
 
 /// Strided batched Hermitian matrix-matrix multiplication
@@ -2057,25 +2065,27 @@ pub unsafe fn hemm_strided_batched<T>(
 where
     T: HemmStridedBatchedType,
 {
-    T::rocblas_hemm_strided_batched(
-        handle,
-        side,
-        uplo,
-        m,
-        n,
-        alpha,
-        A,
-        lda,
-        stride_A,
-        B,
-        ldb,
-        stride_B,
-        beta,
-        C,
-        ldc,
-        stride_C,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_hemm_strided_batched(
+            handle,
+            side,
+            uplo,
+            m,
+            n,
+            alpha,
+            A,
+            lda,
+            stride_A,
+            B,
+            ldb,
+            stride_B,
+            beta,
+            C,
+            ldc,
+            stride_C,
+            batch_count,
+        )
+    }
 }
 
 /// Batched Hermitian rank-k update
@@ -2096,20 +2106,22 @@ pub unsafe fn herk_batched<T, R>(
 where
     T: HerkBatchedType<ScalarType = R>,
 {
-    T::rocblas_herk_batched(
-        handle,
-        uplo,
-        transA,
-        n,
-        k,
-        alpha,
-        A,
-        lda,
-        beta,
-        C,
-        ldc,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_herk_batched(
+            handle,
+            uplo,
+            transA,
+            n,
+            k,
+            alpha,
+            A,
+            lda,
+            beta,
+            C,
+            ldc,
+            batch_count,
+        )
+    }
 }
 
 /// Strided batched Hermitian rank-k update
@@ -2132,22 +2144,24 @@ pub unsafe fn herk_strided_batched<T, R>(
 where
     T: HerkStridedBatchedType<ScalarType = R>,
 {
-    T::rocblas_herk_strided_batched(
-        handle,
-        uplo,
-        transA,
-        n,
-        k,
-        alpha,
-        A,
-        lda,
-        stride_A,
-        beta,
-        C,
-        ldc,
-        stride_C,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_herk_strided_batched(
+            handle,
+            uplo,
+            transA,
+            n,
+            k,
+            alpha,
+            A,
+            lda,
+            stride_A,
+            beta,
+            C,
+            ldc,
+            stride_C,
+            batch_count,
+        )
+    }
 }
 
 /// Hermitian rank-k update with two matrices
@@ -2190,9 +2204,11 @@ pub unsafe fn herkx<T, R>(
 where
     T: HerkxType<ScalarType = R>,
 {
-    T::rocblas_herkx(
-        handle, uplo, trans, n, k, alpha, A, lda, B, ldb, beta, C, ldc,
-    )
+    unsafe {
+        T::rocblas_herkx(
+            handle, uplo, trans, n, k, alpha, A, lda, B, ldb, beta, C, ldc,
+        )
+    }
 }
 
 /// Batched Hermitian rank-k update with two matrices
@@ -2215,22 +2231,24 @@ pub unsafe fn herkx_batched<T, R>(
 where
     T: HerkxBatchedType<ScalarType = R>,
 {
-    T::rocblas_herkx_batched(
-        handle,
-        uplo,
-        trans,
-        n,
-        k,
-        alpha,
-        A,
-        lda,
-        B,
-        ldb,
-        beta,
-        C,
-        ldc,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_herkx_batched(
+            handle,
+            uplo,
+            trans,
+            n,
+            k,
+            alpha,
+            A,
+            lda,
+            B,
+            ldb,
+            beta,
+            C,
+            ldc,
+            batch_count,
+        )
+    }
 }
 
 /// Strided batched Hermitian rank-k update with two matrices
@@ -2256,25 +2274,27 @@ pub unsafe fn herkx_strided_batched<T, R>(
 where
     T: HerkxStridedBatchedType<ScalarType = R>,
 {
-    T::rocblas_herkx_strided_batched(
-        handle,
-        uplo,
-        trans,
-        n,
-        k,
-        alpha,
-        A,
-        lda,
-        stride_A,
-        B,
-        ldb,
-        stride_B,
-        beta,
-        C,
-        ldc,
-        stride_C,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_herkx_strided_batched(
+            handle,
+            uplo,
+            trans,
+            n,
+            k,
+            alpha,
+            A,
+            lda,
+            stride_A,
+            B,
+            ldb,
+            stride_B,
+            beta,
+            C,
+            ldc,
+            stride_C,
+            batch_count,
+        )
+    }
 }
 
 /// Trait for types that can be used with herkx

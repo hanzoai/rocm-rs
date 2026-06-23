@@ -19,7 +19,7 @@ pub trait Generator {
     }
 
     /// Set the ordering of the generator
-    fn set_ordering(&mut self, ordering: u32) -> Result<()> {
+    fn set_ordering(&mut self, ordering: bindings::rocrand_ordering) -> Result<()> {
         unsafe { Error::from_status(bindings::rocrand_set_ordering(self.as_ptr(), ordering)) }
     }
 
@@ -56,7 +56,7 @@ impl PseudoRng {
     ///
     /// let generator = PseudoRng::new(rng_type::XORWOW).unwrap();
     /// ```
-    pub fn new(rng_type: u32) -> Result<Self> {
+    pub fn new(rng_type: bindings::rocrand_rng_type) -> Result<Self> {
         let mut generator = ptr::null_mut();
         unsafe {
             Error::from_status(bindings::rocrand_create_generator(&mut generator, rng_type))?;
@@ -67,7 +67,7 @@ impl PseudoRng {
     }
 
     /// Create a new host-side pseudorandom number generator of the specified type.
-    pub fn new_host(rng_type: u32) -> Result<Self> {
+    pub fn new_host(rng_type: bindings::rocrand_rng_type) -> Result<Self> {
         let mut generator = ptr::null_mut();
         unsafe {
             Error::from_status(bindings::rocrand_create_generator_host(
@@ -315,7 +315,7 @@ pub struct QuasiRng {
 
 impl QuasiRng {
     /// Create a new quasirandom number generator of the specified type.
-    pub fn new(rng_type: u32) -> Result<Self> {
+    pub fn new(rng_type: bindings::rocrand_rng_type) -> Result<Self> {
         let mut generator = ptr::null_mut();
         unsafe {
             Error::from_status(bindings::rocrand_create_generator(&mut generator, rng_type))?;

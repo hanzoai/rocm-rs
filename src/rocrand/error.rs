@@ -34,7 +34,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 impl Error {
     /// Convert a rocrand status code to a Result
-    pub(crate) fn from_status(status: u32) -> Result<()> {
+    pub(crate) fn from_status(status: bindings::rocrand_status) -> Result<()> {
         match status {
             bindings::rocrand_status_ROCRAND_STATUS_SUCCESS => Ok(()),
             bindings::rocrand_status_ROCRAND_STATUS_VERSION_MISMATCH => Err(Error::VersionMismatch),
@@ -52,7 +52,7 @@ impl Error {
             }
             bindings::rocrand_status_ROCRAND_STATUS_LAUNCH_FAILURE => Err(Error::LaunchFailure),
             bindings::rocrand_status_ROCRAND_STATUS_INTERNAL_ERROR => Err(Error::InternalError),
-            other => Err(Error::Unknown(other)),
+            other => Err(Error::Unknown(other as u32)),
         }
     }
 }

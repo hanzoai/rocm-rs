@@ -1914,7 +1914,9 @@ pub unsafe fn spr<T>(
 where
     T: SprType,
 {
-    T::rocblas_spr(handle, uplo, n, alpha, x, incx, AP)
+    unsafe {
+        T::rocblas_spr(handle, uplo, n, alpha, x, incx, AP)
+    }
 }
 
 // Similar functions and traits for spr, spr2, syr, syr2
@@ -1944,9 +1946,11 @@ pub unsafe fn hemm<T>(
 where
     T: HemmType,
 {
-    T::rocblas_hemm(
-        handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc,
-    )
+    unsafe {
+        T::rocblas_hemm(
+            handle, side, uplo, m, n, alpha, A, lda, B, ldb, beta, C, ldc,
+        )
+    }
 }
 
 /// Hermitian rank-k update
@@ -1973,7 +1977,9 @@ pub unsafe fn herk<T, R>(
 where
     T: HerkType<ScalarType = R>,
 {
-    T::rocblas_herk(handle, uplo, transA, n, k, alpha, A, lda, beta, C, ldc)
+    unsafe {
+        T::rocblas_herk(handle, uplo, transA, n, k, alpha, A, lda, beta, C, ldc)
+    }
 }
 
 pub unsafe fn syr_batched<T>(
@@ -1990,7 +1996,9 @@ pub unsafe fn syr_batched<T>(
 where
     T: SyrBatchedType,
 {
-    T::rocblas_syr_batched(handle, uplo, n, alpha, x, incx, A, lda, batch_count)
+    unsafe {
+        T::rocblas_syr_batched(handle, uplo, n, alpha, x, incx, A, lda, batch_count)
+    }
 }
 
 /// Strided batched symmetric rank-1 update
@@ -2010,19 +2018,21 @@ pub unsafe fn syr_strided_batched<T>(
 where
     T: SyrStridedBatchedType,
 {
-    T::rocblas_syr_strided_batched(
-        handle,
-        uplo,
-        n,
-        alpha,
-        x,
-        incx,
-        stride_x,
-        A,
-        lda,
-        stride_A,
-        batch_count,
-    )
+    unsafe {
+        T::rocblas_syr_strided_batched(
+            handle,
+            uplo,
+            n,
+            alpha,
+            x,
+            incx,
+            stride_x,
+            A,
+            lda,
+            stride_A,
+            batch_count,
+        )
+    }
 }
 
 /// Batched symmetric rank-2 update

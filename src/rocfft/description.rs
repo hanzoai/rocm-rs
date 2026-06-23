@@ -21,7 +21,7 @@ pub enum CommType {
     MPI,
 }
 
-impl From<CommType> for u32 {
+impl From<CommType> for bindings::rocfft_comm_type {
     fn from(comm_type: CommType) -> Self {
         match comm_type {
             CommType::None => bindings::rocfft_comm_type_e_rocfft_comm_none,

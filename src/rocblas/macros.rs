@@ -32,7 +32,7 @@ macro_rules! impl_rocblas_traits {
         ($($fn_arg:ty),+ $(,)?),
         ($($call_arg:expr),+ $(,)?)
     ) => {
-        type $fn_type<T> = unsafe extern "C" fn($($fn_arg),+) -> u32;
+        type $fn_type<T> = unsafe extern "C" fn($($fn_arg),+) -> ffi::rocblas_status;
 
         pub trait $trait_name {
             fn func() -> $fn_type<Self>;
