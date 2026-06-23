@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 csv = "1.4.0"
-rocm-rs = { path = "../../../.." , features = ["miopen"]}
+rocm-rs = { package = "hanzo-rocm", path = "../../../.." , features = ["miopen"]}
