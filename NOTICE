@@ -1,11 +1,47 @@
 Hanzo rocm-rs
 Copyright (c) 2026 Hanzo AI, Inc.
 
-This product includes software from rocm-rs (https://github.com/RustNSparks/rocm-rs),
-licensed under the MIT License:
+This product includes software from rocm-rs, a Rust bindings library for AMD
+ROCm by Diaconu Radu-Mihai (https://github.com/RustNSparks/rocm-rs), licensed
+under the MIT License:
 
     Copyright (c) 2025 Diaconu Radu-Mihai
 
-The upstream MIT license (retaining the original author's copyright) is preserved in
-this repository as LICENSE. This work is a derivative of rocm-rs and remains
-MIT-licensed; the upstream license has not been changed.
+Forked from https://github.com/RustNSparks/rocm-rs at upstream crate version
+0.5.1 (upstream master commit 6a873cc).
+
+The upstream MIT license (retaining the original author's copyright) is
+preserved in this repository as LICENSE. This work is a derivative of rocm-rs
+and remains MIT-licensed; the upstream license has not been changed.
+
+DEVIATIONS
+
+Changes in this fork relative to upstream rocm-rs 0.5.1:
+
+- Renamed the published crate from `rocm-rs` to `hanzo-rocm` (version 0.5.1 ->
+  0.5.2) and repointed `repository` and `documentation` to
+  github.com/hanzoai/rocm-rs and docs.rs/hanzo-rocm (Cargo.toml). Workspace
+  example crates depend on it via a package rename
+  (`rocm-rs = { package = "hanzo-rocm" }`), so `use rocm_rs::...` paths are
+  unchanged.
+- Added a default-on `gpu-sort` feature that gates the embedded amdgcn
+  bitonic-sort kernel; with the feature off, `SORTING_KERNEL` is empty bytes and
+  `sort()` is a runtime no-op, so the crate builds on hosts where the kernel's
+  nested nightly + build-std compile is unavailable (Cargo.toml,
+  src/hip/memory_ext/sorting.rs).
+- Changed FFI status/enum return types and enum arguments from hardcoded `u32`
+  to the bindgen-generated types (`ffi::rocblas_status`,
+  `bindings::rocrand_rng_type`, `rocfft_status_e`, ...) so the crate compiles
+  under MSVC, where those C enums are `i32`; a no-op on Linux where the alias is
+  already `u32` (src/rocblas/macros.rs, src/rocrand/{error,generator,mod}.rs,
+  src/rocfft/{error,plan,description}.rs, src/rocarray/random.rs).
+- Wrapped unsafe trait-method calls in explicit `unsafe { }` blocks in the
+  rocBLAS forwarders to satisfy edition-2024 `unsafe_op_in_unsafe_fn`
+  (src/rocblas/level1.rs, level2.rs, level3.rs).
+- Regenerated the FFI bindings against the installed ROCm headers, substantially
+  expanding the rocSOLVER, rocSPARSE, HIP, MIOpen, rocBLAS, rocRAND, and rocFFT
+  `bindings.rs`.
+- Added UPSTREAM_PR_NOTES.md recording the Windows/MSVC portability changes as
+  candidates for an upstream pull request.
+- Added a README hero banner (.github/hero.svg) and rebranded the README to
+  "Hanzo rocm-rs".
