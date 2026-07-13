@@ -1,8 +1,10 @@
-<p align="center"><img src=".github/hero.svg" alt="rocm-rs" width="880"></p>
+<p align="center"><img src=".github/hero.svg" alt="Hanzo rocm-rs" width="880"></p>
 
-# rocm-rs: Safe Rust wrappers for AMD ROCm Libraries
+# Hanzo rocm-rs: Safe Rust wrappers for AMD ROCm Libraries
 
 This project provides Rust bindings for AMD's ROCm (Radeon Open Compute) libraries, allowing Rust developers to leverage AMD GPUs for high-performance computing.
+
+Hanzo rocm-rs is a fork of [rocm-rs](https://github.com/RustNSparks/rocm-rs) by Diaconu Radu-Mihai (MIT), published as the `hanzo-rocm` crate. See [NOTICE](NOTICE) for provenance and the full list of changes.
 
 ## Disclaimer
 
@@ -40,7 +42,8 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rocm-rs = "5.1"
+# Published as `hanzo-rocm`; the package rename keeps `use rocm_rs::...` paths working.
+rocm-rs = { package = "hanzo-rocm", version = "0.5.2" }
 ```
 
 ## Usage
@@ -227,7 +230,7 @@ fn main() {
 
 ```bash
 # Clone the repository
-git clone https://github.com/RustNSparks/rocm-rs
+git clone https://github.com/hanzoai/rocm-rs
 cd rocm-rs
 
 # Set the ROCm path if not in the default location
