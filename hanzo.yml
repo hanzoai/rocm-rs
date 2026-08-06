@@ -6,8 +6,14 @@
 # what CI proves is that the Rust in this repo compiles against the bindings this
 # repo ships. Regenerating them needs ROCm headers and an AMD host; that is a
 # hardware lane, not a push gate.
+#
+# Features are the default set minus `gpu-sort`, which Cargo.toml documents as
+# the one to turn off where "the kernel's nested nightly+build-std cargo build is
+# unavailable" — a stock runner is precisely that host. Leaving it on would make
+# this gate report on the absence of a nightly amdgcn toolchain rather than on
+# the code.
 test:
   - name: build
     run: |
       set -euo pipefail
-      SKIP_BINDGEN=1 cargo build --locked --all-features
+      SKIP_BINDGEN=1 cargo build --locked --no-default-features --features macros,miopen
