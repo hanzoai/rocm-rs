@@ -1,0 +1,13 @@
+# Rust bindings to the ROCm stack (HIP, rocBLAS, rocFFT, MIOpen, …).
+#
+# Gate: the crate compiles against the bindings committed under src/*/bindings.rs.
+# SKIP_BINDGEN is the escape build.rs itself declares for exactly this case — a
+# host with no /opt/rocm regenerates nothing and uses the checked-in bindings, so
+# what CI proves is that the Rust in this repo compiles against the bindings this
+# repo ships. Regenerating them needs ROCm headers and an AMD host; that is a
+# hardware lane, not a push gate.
+test:
+  - name: build
+    run: |
+      set -euo pipefail
+      SKIP_BINDGEN=1 cargo build --locked --all-features
