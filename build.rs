@@ -135,6 +135,13 @@ fn main() {
         // }
     ];
 
+    // MIOpen ships with the Linux ROCm SDK but not the Windows one: link and bind it only when the
+    // `miopen` feature asks for it.
+    let modules: Vec<ModuleConfig> = modules
+        .into_iter()
+        .filter(|m| m.name != "miopen" || env::var_os("CARGO_FEATURE_MIOPEN").is_some())
+        .collect();
+
     // Sort modules by dependency order
     let sorted_modules = sort_modules_by_dependencies(&modules);
 
