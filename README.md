@@ -2,6 +2,8 @@
 
 # Hanzo rocm-rs: Safe Rust wrappers for AMD ROCm Libraries
 
+[![Open in Hanzo](https://hanzo.app/badges/open-in-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/rocm-rs&ref=main&action=open) [![Edit with Hanzo](https://hanzo.app/badges/edit-with-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/rocm-rs&ref=main&action=edit) [![Deploy with Hanzo](https://hanzo.app/badges/deploy-with-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/rocm-rs&ref=main&action=deploy)
+
 This project provides Rust bindings for AMD's ROCm (Radeon Open Compute) libraries, allowing Rust developers to leverage AMD GPUs for high-performance computing.
 
 Hanzo rocm-rs is a fork of [rocm-rs](https://github.com/RustNSparks/rocm-rs) by Diaconu Radu-Mihai (MIT), published as the `hanzo-rocm` crate. See [NOTICE](NOTICE) for provenance and the full list of changes.
